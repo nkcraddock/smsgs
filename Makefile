@@ -5,5 +5,6 @@ dep:
 
 docker:
 	docker build -t smsgs .
-	docker run -d -e RABBITMQ_NODENAME=smsgs --name smsgs smsgs
+	docker run -d -e RABBITMQ_NODENAME=smsgs --name smsgs -p 15672:15672 smsgs
+
 
