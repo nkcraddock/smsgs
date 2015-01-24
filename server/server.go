@@ -1,12 +1,25 @@
 package main
 
-import "github.com/go-martini/martini"
+import (
+	"flag"
+	"net/http"
+	"strconv"
+
+	"github.com/codegangsta/negroni"
+)
 
 func main() {
-	m := martini.Classic()
-	m.Get("/", func() string {
-		return "test"
-	})
+	port := flag.Int("p", 3000, "the port")
+	flag.Parse()
 
-	m.Run()
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", HomeHandler)
+
+	n := negroni.Classic()
+	n.UseHandler(mux)
+	n.Run(":" + strconv.Itoa(*port))
+}
+
+func HomeHandler(res http.ResponseWriter, req *http.Request) {
+
 }
