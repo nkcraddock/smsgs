@@ -1,5 +1,5 @@
 run: dep
-	godep go run server.go
+	godep go run server/server.go
 dep:
 	go get github.com/tools/godep
 
