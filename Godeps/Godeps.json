@@ -11,6 +11,10 @@
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-85-gbbd489b",
 			"Rev": "bbd489b35fd7eac9aaf442e5671ab21cdd972926"
+		},
+		{
+			"ImportPath": "github.com/streadway/amqp",
+			"Rev": "150b7f24d6ad507e6026c13d85ce1f1391ac7400"
 		}
 	]
 }
