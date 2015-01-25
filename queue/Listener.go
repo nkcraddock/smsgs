@@ -21,10 +21,6 @@ type RabbitEventListener struct {
 	Events   chan Event
 }
 
-func (l RabbitEventListener) Listen(topic string) {
-	l.ch.QueueBind(l.exchange, topic, l.exchange, false, nil)
-}
-
 func NewRabbitListener(uri string, exchangeName string) EventListener {
 	bufferSize := 10
 	conn, _ := amqp.Dial(uri)
@@ -47,6 +43,10 @@ func NewRabbitListener(uri string, exchangeName string) EventListener {
 		}
 	}()
 	return newListener
+}
+
+func (l RabbitEventListener) Listen(topic string) {
+	l.ch.QueueBind(l.exchange, topic, l.exchange, false, nil)
 }
 
 func (l RabbitEventListener) Channel() chan Event {
