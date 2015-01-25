@@ -9,10 +9,12 @@ const (
 )
 
 func main() {
-	c := queue.Publisher(rabbitUri, exchange)
-	defer close(c)
+	c := queue.OpenRabbit(rabbitUri)
+	defer c.Close()
+
+	events := c.Publish(exchange)
 
 	for {
-		c <- queue.GenerateRandomEvent(publisher)
+		events <- queue.GenerateRandomEvent(publisher)
 	}
 }
