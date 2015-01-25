@@ -15,9 +15,9 @@
 # to test
 run all of these:
 ~~~
-  $ make
-  $ go run test/publisher.go
-  $ go run test/subscriber.go
+  $ make server
+  $ make publisher
+  $ make subscriber
 ~~~
 
 then use your favorite api client tool to POST

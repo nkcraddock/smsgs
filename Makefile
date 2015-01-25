@@ -1,5 +1,12 @@
-run: dep
+server: dep
 	godep go run subapi/*.go
+
+publisher: dep
+	godep go run test/publisher.go
+
+subscriber: dep
+	godep go run test/subscriber.go
+
 dep:
 	go get github.com/tools/godep
 
