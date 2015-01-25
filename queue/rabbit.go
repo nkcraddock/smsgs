@@ -9,9 +9,10 @@ import (
 
 type Q interface {
 	Publish(string) chan<- Event
-	//	Listen(string, <-chan Event)
-	//	Bind(string, string, string)
+	Listen(string) <-chan Event
+	Bind(string, string, string)
 	Close()
+	Purge(string)
 }
 
 type rabbitConnection struct {
@@ -32,6 +33,11 @@ func OpenRabbit(uri string) Q {
 	}
 }
 
+func (c rabbitConnection) Purge(name string) {
+	c.ch.ExchangeDelete(name, false, false)
+	c.ch.QueueDelete(name, false, false, false)
+}
+
 func (c rabbitConnection) Publish(exchangeName string) chan<- Event {
 	c.ch.ExchangeDeclare(exchangeName, "topic", false, false, false, false, nil)
 
@@ -45,6 +51,30 @@ func (c rabbitConnection) Publish(exchangeName string) chan<- Event {
 	}()
 
 	return eventChannel
+}
+
+func (c rabbitConnection) Listen(queueName string) <-chan Event {
+	c.ch.ExchangeDeclare(queueName, "topic", false, false, false, false, nil)
+	c.ch.QueueDeclare(queueName, false, false, false, false, nil)
+	c.ch.QueueBind(queueName, "#", queueName, false, nil)
+	eventChannel := make(chan Event)
+	msgs, _ := c.ch.Consume(queueName, "", false, false, false, false, nil)
+	go func() {
+		for e := range msgs {
+			var evt Event
+			json.Unmarshal(e.Body, &evt)
+			eventChannel <- evt
+			e.Ack(false)
+		}
+	}()
+	return eventChannel
+}
+
+func (c rabbitConnection) Bind(src string, target string, filter string) {
+	fmt.Println("BINDING:", src, target, filter)
+	c.ch.ExchangeDeclare(src, "topic", false, false, false, false, nil)
+	c.ch.ExchangeDeclare(target, "topic", false, false, false, false, nil)
+	c.ch.ExchangeBind(target, filter, src, false, nil)
 }
 
 func (c rabbitConnection) Close() {
@@ -63,7 +93,7 @@ func (c rabbitConnection) publish(exchangeName string, evt *Event) {
 			ContentType: "application/json",
 			Body:        b,
 		})
-	fmt.Println("PUBLISHED:", string(b))
+	fmt.Println("PUBLISHED:", topic(evt))
 }
 
 func body(evt *Event) ([]byte, error) {
