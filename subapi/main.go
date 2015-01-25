@@ -1,10 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-
 	"github.com/go-martini/martini"
 	"github.com/nkcraddock/smessages/queue"
 	"github.com/nkcraddock/smessages/webhooks"
@@ -24,29 +20,9 @@ func main() {
 	m.Map(p)
 	m.Map(q)
 
-	m.Get("/webhooks", func() string {
-		response, _ := json.Marshal(p.GetHooks())
-		return string(response)
-	})
-
+	m.Get("/webhooks", GetWebhooks)
 	m.Post("/webhooks", AddWebhook)
+	m.Delete("/webhooks", DeleteWebhook)
 
 	m.RunOnAddr(":3001")
-}
-
-func AddWebhook(res http.ResponseWriter, req *http.Request, p webhooks.Persister, q queue.Q) {
-	dec := json.NewDecoder(req.Body)
-	var hook webhooks.Webhook
-	err := dec.Decode(&hook)
-
-	if err != nil {
-		fmt.Fprintf(res, "AddWebhook failed: %s", err)
-		return
-	}
-
-	if p.AddHook(hook) {
-		id := p.GetQueue(hook.Url)
-		q.Subscribe(id)
-		q.Bind(exchange, id, hook.Topic())
-	}
 }

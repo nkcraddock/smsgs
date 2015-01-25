@@ -73,6 +73,11 @@ func (c rabbitConnection) Bind(src string, target string, filter string) {
 	c.ch.ExchangeBind(target, filter, src, false, nil)
 }
 
+func (c rabbitConnection) Unbind(src string, target string, filter string) {
+	fmt.Println("UNBINDING:", src, target, filter)
+	c.ch.ExchangeUnbind(target, filter, src, false, nil)
+}
+
 func (c rabbitConnection) Close() {
 	c.ch.Close()
 	c.conn.Close()

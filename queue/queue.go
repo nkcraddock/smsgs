@@ -5,6 +5,7 @@ type Q interface {
 	Listen(string) <-chan Event
 	Subscribe(string)
 	Bind(string, string, string)
+	Unbind(string, string, string)
 	Close()
 	Purge(string)
 }

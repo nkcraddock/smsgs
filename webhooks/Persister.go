@@ -8,6 +8,7 @@ import (
 
 type Persister interface {
 	AddHook(hook Webhook) bool
+	DeleteHook(hook Webhook) bool
 	GetHooks() []Webhook
 	GetQueue(string) string
 }
@@ -34,6 +35,18 @@ func (p MemPersister) AddHook(hook Webhook) bool {
 		return true
 	}
 
+	return false
+}
+
+func (p MemPersister) DeleteHook(hook Webhook) bool {
+	t := hook.Topic()
+	h := p.GetSub(hook.Url)
+
+	if _, ok := h[t]; ok {
+		delete(h, t)
+		fmt.Println("Removed hook:", hook)
+		return true
+	}
 	return false
 }
 
