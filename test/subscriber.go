@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	rabbitUri = "amqp://guest:guest@172.17.0.24:5672"
+	rabbitUri = "amqp://guest:guest@localhost:5672"
 	sub       = "sub-qt"
 	hookUrl   = "http://localhost:3001/test"
 	exch      = "smsgs.evt"

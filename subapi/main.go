@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	rabbitUri = "amqp://guest:guest@172.17.0.24:5672"
+	rabbitUri = "amqp://guest:guest@localhost:5672"
 	exchange  = "smsgs.evt"
 	publisher = "qt"
 )
