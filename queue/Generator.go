@@ -5,7 +5,7 @@ import (
 	"math/rand"
 )
 
-func GenerateRandomEvent(publisher string) *Event {
+func GenerateRandomEvent(publisher string) Event {
 	types := []string{"user", "group", "computer", "gun"}
 	keys := createKeys(100)
 
@@ -23,7 +23,7 @@ func GenerateRandomEvent(publisher string) *Event {
 		p = fmt.Sprintf(`{ "cid" : "%d" }`, rand.Intn(100)+1000)
 	}
 
-	return &Event{
+	return Event{
 		Publisher: publisher,
 		EventType: t,
 		Key:       k,

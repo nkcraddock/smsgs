@@ -13,6 +13,6 @@ func main() {
 	defer close(c)
 
 	for {
-		c <- *(queue.GenerateRandomEvent(publisher))
+		c <- queue.GenerateRandomEvent(publisher)
 	}
 }
