@@ -1,8 +1,5 @@
 # smessages for your smessaging needs
 ~~~
-  $ sudo make docker 
-  $ make
+  $ sudo make docker rabbit 
 ~~~
 
-then go to
-  http://localhost:3000 
