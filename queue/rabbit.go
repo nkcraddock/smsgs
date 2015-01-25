@@ -10,6 +10,7 @@ import (
 type Q interface {
 	Publish(string) chan<- Event
 	Listen(string) <-chan Event
+	Subscribe(string)
 	Bind(string, string, string)
 	Close()
 	Purge(string)
@@ -54,9 +55,7 @@ func (c rabbitConnection) Publish(exchangeName string) chan<- Event {
 }
 
 func (c rabbitConnection) Listen(queueName string) <-chan Event {
-	c.ch.ExchangeDeclare(queueName, "topic", false, false, false, false, nil)
-	c.ch.QueueDeclare(queueName, false, false, false, false, nil)
-	c.ch.QueueBind(queueName, "#", queueName, false, nil)
+	c.Subscribe(queueName)
 	eventChannel := make(chan Event)
 	msgs, _ := c.ch.Consume(queueName, "", false, false, false, false, nil)
 	go func() {
@@ -68,6 +67,12 @@ func (c rabbitConnection) Listen(queueName string) <-chan Event {
 		}
 	}()
 	return eventChannel
+}
+
+func (c rabbitConnection) Subscribe(queueName string) {
+	c.ch.ExchangeDeclare(queueName, "topic", false, false, false, false, nil)
+	c.ch.QueueDeclare(queueName, false, false, false, false, nil)
+	c.ch.QueueBind(queueName, "#", queueName, false, nil)
 }
 
 func (c rabbitConnection) Bind(src string, target string, filter string) {

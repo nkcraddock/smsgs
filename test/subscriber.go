@@ -4,11 +4,13 @@ import (
 	"fmt"
 
 	"github.com/nkcraddock/smessages/queue"
+	"github.com/nu7hatch/gouuid"
 )
 
 const (
 	rabbitUri = "amqp://guest:guest@172.17.0.24:5672"
 	sub       = "sub-qt"
+	hookUrl   = "http://localhost:3001/test"
 	exch      = "smsgs.evt"
 )
 
@@ -17,9 +19,16 @@ func main() {
 
 	defer q.Close()
 
-	in := q.Listen(sub)
+	queue := getId(hookUrl)
+	in := q.Listen(queue)
 
 	for x := range in {
 		fmt.Println("RECEIVED:", x)
 	}
+
+}
+
+func getId(url string) string {
+	u, _ := uuid.NewV5(uuid.NamespaceURL, []byte(url))
+	return u.String()
 }

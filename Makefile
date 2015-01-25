@@ -1,5 +1,5 @@
 run: dep
-	godep go run pubapi/main.go
+	godep go run subapi/main.go
 dep:
 	go get github.com/tools/godep
 
