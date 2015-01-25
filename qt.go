@@ -10,12 +10,13 @@ import (
 const publisher = "qt"
 
 func main() {
-	q := queue.NewRabbit("amqp://guest:guest@172.17.0.24:5672")
+	q := queue.NewRabbitPublisher("amqp://guest:guest@172.17.0.24:5672", "smsgs.evt")
+	c := q.Channel()
 	defer q.Close()
 	for {
 		go func() {
-			q.Publish(createRandomMessage())
-			// time.Sleep(10 * time.Millisecond)
+			msg := createRandomMessage()
+			c <- *msg
 		}()
 	}
 }

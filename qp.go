@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	q := queue.NewRabbitListener("amqp://guest:guest@172.17.0.24:5672")
+	q := queue.NewRabbitListener("amqp://guest:guest@172.17.0.24:5672", "smsgs.evt")
 
 	letters := []rune("ABCDEFGHIJKLMNOPQRSTUV")
 	types := []string{"group", "user", "computer"}
