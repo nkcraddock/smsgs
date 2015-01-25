@@ -7,26 +7,19 @@ import (
 	"github.com/streadway/amqp"
 )
 
-type EventPublisher interface {
-	Close()
-	Channel() chan<- Event
-}
-
-// Rabbit
-
-type RabbitEventPublisher struct {
+type rabbitEventPublisher struct {
 	conn     *amqp.Connection
 	ch       *amqp.Channel
 	exchange string
 	c        chan Event
 }
 
-func NewRabbitPublisher(uri string, exchange string) EventPublisher {
+func Publisher(uri string, exchange string) chan Event {
 	conn, _ := amqp.Dial(uri)
 	ch, _ := conn.Channel()
 	ch.ExchangeDeclare(exchange, "topic", false, false, false, false, nil)
-	newPublisher := new(RabbitEventPublisher)
-	newPublisher = &RabbitEventPublisher{
+	newPublisher := new(rabbitEventPublisher)
+	newPublisher = &rabbitEventPublisher{
 		conn:     conn,
 		ch:       ch,
 		c:        make(chan Event),
@@ -37,9 +30,10 @@ func NewRabbitPublisher(uri string, exchange string) EventPublisher {
 		for event := range newPublisher.c {
 			newPublisher.Publish(&event)
 		}
+		newPublisher.Close()
 	}()
 
-	return newPublisher
+	return newPublisher.c
 }
 
 func body(evt *Event) ([]byte, error) {
@@ -47,11 +41,11 @@ func body(evt *Event) ([]byte, error) {
 	return data, nil
 }
 
-func (p *RabbitEventPublisher) Channel() chan<- Event {
+func (p *rabbitEventPublisher) Channel() chan<- Event {
 	return p.c
 }
 
-func (p *RabbitEventPublisher) Publish(evt *Event) {
+func (p *rabbitEventPublisher) Publish(evt *Event) {
 	topic := fmt.Sprintf("%s.%s.%s", evt.Publisher, evt.EventType, evt.Key)
 	b, _ := body(evt)
 	p.ch.Publish(
@@ -63,10 +57,10 @@ func (p *RabbitEventPublisher) Publish(evt *Event) {
 			ContentType: "application/json",
 			Body:        b,
 		})
-	fmt.Println("Published a smsg", string(b))
+	fmt.Println("PUBLISHED:", string(b))
 }
 
-func (p *RabbitEventPublisher) Close() {
+func (p *rabbitEventPublisher) Close() {
 	close(p.c)
 	p.ch.Close()
 	p.conn.Close()
