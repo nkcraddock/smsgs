@@ -6,10 +6,14 @@ this will start the rabbit docker container on localhost:5672 and localhost:1567
 	$ sudo make rabbit 
 
 # server
-	/webhooks - subscriptions pointing topic filters to your url endpoint
 
-# publisher
-	test/publisher.go - publishes random events to the main exchange
+    subapi/main.go - web api w/ go martini
+  	  /webhooks - subscriptions pointing topic filters to your url endpoint
+      /events - POST an event to dump it into the bus
+      /mock-subscriber - This is the API endpoint the dispatcher pushes to
+
+# dispatcher
+	test/dispatcher.go - pulls messages off the queues and delivers them to the appropriate endpoint 
 
 # subscriber
 	test/subscriber.go - reads a specific subscriber queue and prints the messages to stdout
@@ -18,7 +22,7 @@ this will start the rabbit docker container on localhost:5672 and localhost:1567
 run all of these:
 ~~~
   $ make server
-  $ make publisher
+  $ make dispatcher
   $ make subscriber
 ~~~
 

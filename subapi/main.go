@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/go-martini/martini"
@@ -32,6 +33,7 @@ func main() {
 	m.Delete("/webhooks", DeleteWebhook)
 
 	m.Post("/events", AddEvent)
+	m.Post("/mock-subscriber", ReceivedEvent)
 
 	m.RunOnAddr(":3001")
 }
@@ -48,4 +50,9 @@ func AddEvent(res http.ResponseWriter, req *http.Request, p chan<- queue.Event) 
 	go func() {
 		p <- evt
 	}()
+}
+
+func ReceivedEvent(res http.ResponseWriter, req *http.Request) {
+	b, _ := ioutil.ReadAll(req.Body)
+	fmt.Println("RECEIVED MESSAGE:", string(b))
 }

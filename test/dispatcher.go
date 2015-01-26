@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/nkcraddock/smessages/queue"
 	"github.com/nu7hatch/gouuid"
@@ -10,7 +13,7 @@ import (
 const (
 	rabbitUri = "amqp://guest:guest@localhost:5672"
 	sub       = "sub-qt"
-	hookUrl   = "http://localhost:3001/test"
+	hookUrl   = "http://localhost:3001/mock-subscriber"
 	exch      = "smsgs.evt"
 )
 
@@ -22,8 +25,10 @@ func main() {
 	queue := getId(hookUrl)
 	in := q.Listen(queue)
 
-	for x := range in {
-		fmt.Println("RECEIVED:", x)
+	for evt := range in {
+		b, _ := json.Marshal(evt)
+		http.Post(hookUrl, "application/json", bytes.NewBuffer(b))
+		fmt.Println("DISPATCHED to", hookUrl)
 	}
 
 }

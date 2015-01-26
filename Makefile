@@ -4,8 +4,8 @@ server: dep
 publisher: dep
 	godep go run test/publisher.go
 
-subscriber: dep
-	godep go run test/subscriber.go
+dispatcher: dep
+	godep go run test/dispatcher.go
 
 dep:
 	go get github.com/tools/godep
