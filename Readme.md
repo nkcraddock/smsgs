@@ -16,7 +16,7 @@ this will start the rabbit docker container on localhost:5672 and localhost:1567
 	test/dispatcher.go - pulls messages off the queues and delivers them to the appropriate endpoint 
 
 # publisher
-	test/publisher.go - publishes random events to the main exchange
+	test/publisher.go - publishes random events to the /events endpoint
 
 # to test
 run all of these:
