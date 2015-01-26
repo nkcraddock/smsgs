@@ -15,15 +15,15 @@ this will start the rabbit docker container on localhost:5672 and localhost:1567
 # dispatcher
 	test/dispatcher.go - pulls messages off the queues and delivers them to the appropriate endpoint 
 
-# subscriber
-	test/subscriber.go - reads a specific subscriber queue and prints the messages to stdout
+# publisher
+	test/publisher.go - publishes random events to the main exchange
 
 # to test
 run all of these:
 ~~~
   $ make server
   $ make dispatcher
-  $ make subscriber
+  $ make publisher
 ~~~
 
 then use your favorite api client tool to POST
