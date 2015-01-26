@@ -1,7 +1,8 @@
 # smessages for your smessaging needs
 
-# rabbit docker container
-  $ sudo make docker rabbit 
+# start the rabbit container
+this will start the rabbit docker container on localhost:5672 and localhost:15672
+  $ sudo make rabbit 
 
 # server
 	/webhooks - subscriptions pointing topic filters to your url endpoint
