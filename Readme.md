@@ -1,4 +1,12 @@
 # smessages for your smessaging needs
+A REST API/[webhooks](http://en.wikipedia.org/wiki/Webhook) wrapper around [RabbitMQ](http://www.rabbitmq.com/)
+
+###Dependencies
+* [go-martini](https://github.com/go-martini/martini)
+* [godep](https://github.com/tools/godep)
+* [docker](https://www.docker.com/)
+* [streadway/amqp](https://github.com/streadway/amqp)
+
 
 # start the rabbit container
 this will start the rabbit docker container on localhost:5672 and localhost:15672
