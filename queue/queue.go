@@ -11,8 +11,8 @@ type Q interface {
 }
 
 type Event struct {
-	Publisher string
-	Key       string
-	EventType string
-	Payload   interface{}
+	Publisher string      `json:"publisher"`
+	Key       string      `json:"key"`
+	EventType string      `json:"eventType"`
+	Payload   interface{} `json:"payload"`
 }

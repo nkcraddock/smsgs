@@ -1,20 +1,23 @@
 package main
 
-import "github.com/nkcraddock/smessages/queue"
+import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+
+	"github.com/nkcraddock/smessages/queue"
+)
 
 const (
-	rabbitUri = "amqp://guest:guest@localhost:5672"
-	exchange  = "smsgs.evt"
 	publisher = "qt"
+	endpoint  = "http://localhost:3001/events"
 )
 
 func main() {
-	c := queue.OpenRabbit(rabbitUri)
-	defer c.Close()
-
-	events := c.Publish(exchange)
-
 	for {
-		events <- queue.GenerateRandomEvent(publisher)
+		evt := queue.GenerateRandomEvent(publisher)
+		b, _ := json.Marshal(evt)
+		http.Post(endpoint, "application/json", bytes.NewBuffer(b))
 	}
+
 }
