@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/go-martini/martini"
-	"github.com/nkcraddock/smessages/queue"
-	"github.com/nkcraddock/smessages/webhooks"
+	"github.com/nkcraddock/smsgs/queue"
+	"github.com/nkcraddock/smsgs/webhooks"
 )
 
 const (

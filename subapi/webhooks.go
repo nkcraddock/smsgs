@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/nkcraddock/smessages/queue"
-	"github.com/nkcraddock/smessages/webhooks"
+	"github.com/nkcraddock/smsgs/queue"
+	"github.com/nkcraddock/smsgs/webhooks"
 )
 
 func AddWebhook(res http.ResponseWriter, req *http.Request, p webhooks.Persister, q queue.Q) {

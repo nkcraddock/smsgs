@@ -9,6 +9,9 @@ dispatcher: dep
 
 dep:
 	go get github.com/tools/godep
+	go get github.com/streadway/amqp
+	go get github.com/go-martini/martini
+	go get github.com/nu7hatch/gouuid
 
 rabbit:
 	docker pull dockerfile/rabbitmq

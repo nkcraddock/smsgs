@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/nkcraddock/smessages/queue"
+	"github.com/nkcraddock/smsgs/queue"
 	"github.com/nu7hatch/gouuid"
 )
 

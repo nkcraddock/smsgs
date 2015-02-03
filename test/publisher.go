@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/nkcraddock/smessages/queue"
+	"github.com/nkcraddock/smsgs/queue"
 )
 
 const (
