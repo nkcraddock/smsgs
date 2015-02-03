@@ -1,17 +1,26 @@
+build: dep
+	mkdir -p bin
+	go build -o bin/webapi ./webapi
+	go build -o bin/publisher ./publisher
+	go build -o bin/dispatcher ./dispatcher
+
 server: dep
-	godep go run subapi/*.go
+	go run webapi/*.go
 
 publisher: dep
-	godep go run test/publisher.go
+	go run publisher/*.go
 
 dispatcher: dep
-	godep go run test/dispatcher.go
+	go run dispatcher/*.go
 
 dep:
 	go get github.com/tools/godep
 	go get github.com/streadway/amqp
 	go get github.com/go-martini/martini
 	go get github.com/nu7hatch/gouuid
+
+docker: dep build
+	
 
 rabbit:
 	docker pull dockerfile/rabbitmq
