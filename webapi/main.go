@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -18,6 +19,9 @@ const (
 )
 
 func main() {
+	port := flag.Int("p", 3001, "the port to listen on")
+	flag.Parse()
+
 	m := martini.Classic()
 	p := webhooks.NewMemPersister()
 	q := queue.OpenRabbit(rabbitUri)
@@ -35,7 +39,7 @@ func main() {
 	m.Post("/events", AddEvent)
 	m.Post("/mock-subscriber", ReceivedEvent)
 
-	m.RunOnAddr(":3001")
+	m.RunOnAddr(fmt.Sprintf(":%d", *port))
 }
 
 func AddEvent(res http.ResponseWriter, req *http.Request, p chan<- queue.Event) {
